@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="cityInput" placeholder="Enter city">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            var cityInput = document.getElementById("cityInput");
+            var city = cityInput.value;
+
+            if (city.trim() === "") {
+                alert("Please enter a city name.");
+                return;
+            }
+
+            var apiKey = "YOUR_API_KEY"; // Replace with your own API key
+            var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", apiUrl, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var temperature = Math.round(response.main.temp - 273.15); // Convert temperature from Kelvin to Celsius
+                    var description = response.weather[0].description;
+
+                    var result = document.getElementById("result");
+                    result.innerHTML = "Temperature: " + temperature + "°C, " + description;
+                } else {
+                    alert("Error retrieving weather data. Please try again.");
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
